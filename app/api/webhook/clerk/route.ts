@@ -5,6 +5,8 @@ import { createUser, deleteUser, updateUser } from '@/lib/actions/user.actions'
 import { clerkClient } from '@clerk/nextjs'
 import { NextResponse } from 'next/server'
 
+const randomFourDigitNumber = Math.floor(1000 + Math.random() * 9000)
+
 export async function POST(req: Request) {
   // You can find this in the Clerk Dashboard -> Webhooks -> choose the webhook
   const WEBHOOK_SECRET = process.env.NEXT_PUBLIC_CLERK_WEBHOOK_SECRET
@@ -62,7 +64,7 @@ export async function POST(req: Request) {
     const user = {
       clerkId: id,
       email: email_addresses[0].email_address,
-      username: username!,
+      username: username! || first_name + `_${randomFourDigitNumber}`,
       firstName: first_name,
       lastName: last_name,
       photo: image_url,
@@ -87,7 +89,7 @@ export async function POST(req: Request) {
     const user = {
       firstName: first_name,
       lastName: last_name,
-      username: username!,
+      username: username! || first_name + `_${randomFourDigitNumber}`,
       photo: image_url,
     }
 
