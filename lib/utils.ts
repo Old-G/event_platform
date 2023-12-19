@@ -32,11 +32,20 @@ export const formatDateTime = (dateString: Date) => {
     hour12: true, // use 12-hour clock (true) or 24-hour clock (false)
   }
 
-  const formattedDateTime: string = new Date(dateString).toLocaleString('en-US', dateTimeOptions)
+  const formattedDateTime: string = new Date(dateString).toLocaleString(
+    'en-US',
+    dateTimeOptions
+  )
 
-  const formattedDate: string = new Date(dateString).toLocaleString('en-US', dateOptions)
+  const formattedDate: string = new Date(dateString).toLocaleString(
+    'en-US',
+    dateOptions
+  )
 
-  const formattedTime: string = new Date(dateString).toLocaleString('en-US', timeOptions)
+  const formattedTime: string = new Date(dateString).toLocaleString(
+    'en-US',
+    timeOptions
+  )
 
   return {
     dateTime: formattedDateTime,
@@ -71,10 +80,13 @@ export function formUrlQuery({ params, key, value }: UrlQueryParams) {
   )
 }
 
-export function removeKeysFromQuery({ params, keysToRemove }: RemoveUrlQueryParams) {
+export function removeKeysFromQuery({
+  params,
+  keysToRemove,
+}: RemoveUrlQueryParams) {
   const currentUrl = qs.parse(params)
 
-  keysToRemove.forEach(key => {
+  keysToRemove.forEach((key) => {
     delete currentUrl[key]
   })
 

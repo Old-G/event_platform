@@ -28,7 +28,7 @@ export type CreateEventParams = {
     categoryId: string
     price: string
     isFree: boolean
-    url: string
+    url?: string
   }
   path: string
 }
@@ -46,7 +46,7 @@ export type UpdateEventParams = {
     categoryId: string
     price: string
     isFree: boolean
-    url: string
+    url?: string
   }
   path: string
 }
@@ -146,4 +146,8 @@ export type RemoveUrlQueryParams = {
 export type SearchParamProps = {
   params: { id: string }
   searchParams: { [key: string]: string | string[] | undefined }
+}
+
+export type EventCardProps = {
+  event: Event
 }

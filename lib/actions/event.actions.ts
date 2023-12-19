@@ -23,7 +23,11 @@ const getCategoryByName = async (name: string) => {
 
 const populateEvent = (query: any) => {
   return query
-    .populate({ path: 'organizer', model: User, select: '_id firstName lastName' })
+    .populate({
+      path: 'organizer',
+      model: User,
+      select: '_id firstName lastName',
+    })
     .populate({ path: 'category', model: Category, select: '_id name' })
 }
 
@@ -35,7 +39,11 @@ export async function createEvent({ userId, event, path }: CreateEventParams) {
     const organizer = await User.findById(userId)
     if (!organizer) throw new Error('Organizer not found')
 
-    const newEvent = await Event.create({ ...event, category: event.categoryId, organizer: userId })
+    const newEvent = await Event.create({
+      ...event,
+      category: event.categoryId,
+      organizer: userId,
+    })
     revalidatePath(path)
 
     return JSON.parse(JSON.stringify(newEvent))
@@ -64,10 +72,14 @@ export async function updateEvent({ userId, event, path }: UpdateEventParams) {
   try {
     await connectToDatabase()
 
+    console.log({ userId, event, path })
+
     const eventToUpdate = await Event.findById(event._id)
-    if (!eventToUpdate || eventToUpdate.organizer.toHexString() !== userId) {
+
+    if (!eventToUpdate || eventToUpdate.organizer !== userId) {
       throw new Error('Unauthorized or event not found')
     }
+    console.log('event', eventToUpdate.organizer)
 
     const updatedEvent = await Event.findByIdAndUpdate(
       event._id,
@@ -95,14 +107,26 @@ export async function deleteEvent({ eventId, path }: DeleteEventParams) {
 }
 
 // GET ALL EVENTS
-export async function getAllEvents({ query, limit = 6, page, category }: GetAllEventsParams) {
+export async function getAllEvents({
+  query,
+  limit = 6,
+  page,
+  category,
+}: GetAllEventsParams) {
   try {
     await connectToDatabase()
 
-    const titleCondition = query ? { title: { $regex: query, $options: 'i' } } : {}
-    const categoryCondition = category ? await getCategoryByName(category) : null
+    const titleCondition = query
+      ? { title: { $regex: query, $options: 'i' } }
+      : {}
+    const categoryCondition = category
+      ? await getCategoryByName(category)
+      : null
     const conditions = {
-      $and: [titleCondition, categoryCondition ? { category: categoryCondition._id } : {}],
+      $and: [
+        titleCondition,
+        categoryCondition ? { category: categoryCondition._id } : {},
+      ],
     }
 
     const skipAmount = (Number(page) - 1) * limit
@@ -124,7 +148,11 @@ export async function getAllEvents({ query, limit = 6, page, category }: GetAllE
 }
 
 // GET EVENTS BY ORGANIZER
-export async function getEventsByUser({ userId, limit = 6, page }: GetEventsByUserParams) {
+export async function getEventsByUser({
+  userId,
+  limit = 6,
+  page,
+}: GetEventsByUserParams) {
   try {
     await connectToDatabase()
 
@@ -139,7 +167,10 @@ export async function getEventsByUser({ userId, limit = 6, page }: GetEventsByUs
     const events = await populateEvent(eventsQuery)
     const eventsCount = await Event.countDocuments(conditions)
 
-    return { data: JSON.parse(JSON.stringify(events)), totalPages: Math.ceil(eventsCount / limit) }
+    return {
+      data: JSON.parse(JSON.stringify(events)),
+      totalPages: Math.ceil(eventsCount / limit),
+    }
   } catch (error) {
     handleError(error)
   }
@@ -156,7 +187,9 @@ export async function getRelatedEventsByCategory({
     await connectToDatabase()
 
     const skipAmount = (Number(page) - 1) * limit
-    const conditions = { $and: [{ category: categoryId }, { _id: { $ne: eventId } }] }
+    const conditions = {
+      $and: [{ category: categoryId }, { _id: { $ne: eventId } }],
+    }
 
     const eventsQuery = Event.find(conditions)
       .sort({ createdAt: 'desc' })
@@ -166,7 +199,10 @@ export async function getRelatedEventsByCategory({
     const events = await populateEvent(eventsQuery)
     const eventsCount = await Event.countDocuments(conditions)
 
-    return { data: JSON.parse(JSON.stringify(events)), totalPages: Math.ceil(eventsCount / limit) }
+    return {
+      data: JSON.parse(JSON.stringify(events)),
+      totalPages: Math.ceil(eventsCount / limit),
+    }
   } catch (error) {
     handleError(error)
   }

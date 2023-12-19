@@ -316,7 +316,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
                                 onCheckedChange={field.onChange}
                                 checked={field.value}
                                 id='isFree'
-                                className='mr-2 h-5 w-5 border-2 border-primary-500'
+                                className='mr-2 h-5 w-5 border-2 border-sky-500'
                               />
                             </div>
                           </FormControl>
@@ -361,7 +361,7 @@ const EventForm = ({ userId, type, event, eventId }: EventFormProps) => {
           type='submit'
           size='lg'
           disabled={form.formState.isSubmitting}
-          className='button col-span-2 w-full'
+          className='button col-span-2 w-full bg-sky-600 hover:bg-sky-500'
         >
           {form.formState.isSubmitting ? 'Submitting...' : `${type} Event `}
         </Button>
