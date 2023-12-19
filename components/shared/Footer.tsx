@@ -5,7 +5,7 @@ const Footer = () => {
   return (
     <footer className='border-t'>
       <div className='flex-center wrapper flex-between flex flex-col gap-4 p-5 text-center sm:flex-row'>
-        <Link href='/' className='w-[65px]'>
+        <Link href='/' className='w-[50px] md:w-[65px]'>
           <Image
             src='/assets/images/evently_logo.png'
             width={128}

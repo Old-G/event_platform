@@ -27,8 +27,9 @@ const MobileNav = () => {
           <Image
             src='/assets/images/evently_logo.png'
             alt='logo'
-            width={128}
+            width={65}
             height={38}
+            className='rounded-2xl'
           />
           <Separator className='border border-gray-50' />
           <NavItems />

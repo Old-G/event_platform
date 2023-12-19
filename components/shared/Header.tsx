@@ -9,7 +9,7 @@ const Header = () => {
   return (
     <header className='w-full border-b'>
       <div className='wrapper flex items-center justify-between'>
-        <Link href='/' className='w-[65px]'>
+        <Link href='/' className='w-[50px] md:w-[65px]'>
           <Image
             src='/assets/images/evently_logo.png'
             width={128}
